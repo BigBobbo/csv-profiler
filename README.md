@@ -1,3 +1,3 @@
 # csv-profiler
 
-# Project to create stats on csv files
+Project to create stats on csv files
