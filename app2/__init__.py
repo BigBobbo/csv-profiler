@@ -30,16 +30,7 @@ def upload_file():
             file.save(os.path.join(ip_dir, filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <h2>''' + str(cwd) + '''</h2>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    '''
+    return render_template("upload.html")
 
 
 
