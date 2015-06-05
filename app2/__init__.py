@@ -1,6 +1,9 @@
 import os
-from flask import Flask, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 from werkzeug import secure_filename
+import pandas as pd
+import numpy as np
+
 
 UPLOAD_FOLDER = '/home/csvprofiler/csv-profiler/app2/uploads'
 cwd = os.getcwd()
@@ -38,11 +41,12 @@ from flask import send_from_directory
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    # txt = open(app.config['UPLOAD_FOLDER'] + "/" + filename)
-    # return txt.read
-    with open(app.config['UPLOAD_FOLDER'] + "/" + filename) as f:
-        os.remove(app.config['UPLOAD_FOLDER'] + "/" + filename)
-        return f.read()
+    x = pd.DataFrame.from_csv(app.config['UPLOAD_FOLDER'] + "/" + filename)
+    os.remove(app.config['UPLOAD_FOLDER'] + "/" + filename)
+    return render_template("analysis.html", name=filename, data=x.to_html())
 
-    # return send_from_directory(app.config['UPLOAD_FOLDER'],
-    #                           filename)
+
+@app.route('/analysis/<filename>')
+def analysis(filename):
+    x = pd.DataFrame(np.random.randn(20, 5))
+    return render_template("analysis.html", name=filename, data=x.to_html())
