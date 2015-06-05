@@ -1,8 +1,9 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 import pandas as pd
 import numpy as np
+from .profiler import profileGen
 
 
 UPLOAD_FOLDER = '/home/csvprofiler/csv-profiler/app2/uploads'
@@ -37,12 +38,13 @@ def upload_file():
     </form>
     '''
 
-from flask import send_from_directory
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    x = pd.DataFrame.from_csv(app.config['UPLOAD_FOLDER'] + "/" + filename)
-    os.remove(app.config['UPLOAD_FOLDER'] + "/" + filename)
+    # x = pd.DataFrame.from_csv(app.config['UPLOAD_FOLDER'] + "/" + filename)
+    # os.remove(app.config['UPLOAD_FOLDER'] + "/" + filename)
+    x = profileGen(app.config['UPLOAD_FOLDER'] + "/" + filename)
     return render_template("analysis.html", name=filename, data=x.to_html())
 
 
