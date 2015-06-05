@@ -77,3 +77,8 @@ def after_login(resp):
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/<name>')
+def hello_name(name):
+    return "Hello {}!".format(name)
+
