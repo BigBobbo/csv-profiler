@@ -28,17 +28,17 @@ def profileGen(source_file):
     #Add profiling columns
     for i in data_profile.index.values:
         #Add Row count and number of unique values
-        data_profile.loc[i,'Row_Count'] = len(from_csv[i])
-        data_profile.loc[i,'Unique_Values'] = len(from_csv[i].value_counts())
+        data_profile.loc[i,'Row Count'] = len(from_csv[i])
+        data_profile.loc[i,'Unique Values'] = len(from_csv[i].value_counts())
         #Add first, second and third most common values
-        data_profile.loc[i,'First_Most_Common'] = from_csv[i].value_counts().index[0]
-        data_profile.loc[i,'First_Most_Common Count'] = from_csv[i].value_counts().values[0]
+        data_profile.loc[i,'1st Most Common'] = from_csv[i].value_counts().index[0]
+        data_profile.loc[i,'1st Most Common Count'] = from_csv[i].value_counts().values[0]
         if len(from_csv[i].value_counts()) > 1:
-            data_profile.loc[i,'Second_Most_Common'] = from_csv[i].value_counts().index[1]
-            data_profile.loc[i,'Second_Most_Common Count'] = from_csv[i].value_counts().values[1]
+            data_profile.loc[i,'2nd Most Common'] = from_csv[i].value_counts().index[1]
+            data_profile.loc[i,'2nd Most Common Cnt'] = from_csv[i].value_counts().values[1]
         if len(from_csv[i].value_counts()) > 2:
-            data_profile.loc[i,'Third_Most_Common'] = from_csv[i].value_counts().index[2]
-            data_profile.loc[i,'Third_Most_Common Count'] = from_csv[i].value_counts().values[2]
+            data_profile.loc[i,'3rd Most Common'] = from_csv[i].value_counts().index[2]
+            data_profile.loc[i,'3rd Most Common Count'] = from_csv[i].value_counts().values[2]
 
     #Create summary stats for each column (
     summary_stats = from_csv.describe()

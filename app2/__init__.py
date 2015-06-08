@@ -41,10 +41,10 @@ def uploaded_file(filename):
     shutil.rmtree(ip_dir)
     # x = profileGen(app.config['UPLOAD_FOLDER'] + "/" + filename)
     # os.remove(app.config['UPLOAD_FOLDER'] + "/" + filename)
-    return render_template("analysis.html", name=filename, data=x.to_html())
+    return render_template("analysis.html", name=filename, data=x.to_html(classes='.table, .table-condensed'))
 
 
 @app.route('/analysis/<filename>')
 def analysis(filename):
     x = pd.DataFrame(np.random.randn(20, 5))
-    return render_template("analysis.html", name=request.headers['X-Real-IP'], data=x.to_html())
+    return render_template("analysis.html", name=request.headers['X-Real-IP'], data=x.to_html(classes='table'))
