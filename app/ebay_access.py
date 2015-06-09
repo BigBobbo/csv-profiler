@@ -9,7 +9,7 @@ except:
 
 
 try:
-    api = Finding(appid="", config_file=None)
+HERE
     response = api.execute('findItemsAdvanced', {'keywords': "O'Connell Street, Limerick City, Ireland - 1950s ? 4 X 6 Postcard"})
     print(response.dict())
 except ConnectionError as e:
