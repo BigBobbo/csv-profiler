@@ -3,13 +3,13 @@ from ebaysdk.shopping import Connection as Shopping
 
 from test1 import *
 
-import math
+# import math
 import pandas as pd
 import time
 
 # for testing
 import datetime
-from xml.etree.ElementTree import ElementTree
+# from xml.etree.ElementTree import ElementTree
 
 apiTrade = Trading(appid=appid, devid=devid, certid=certid, token=token,config_file=None)
 apiShop = Shopping(appid=appid,config_file=None)
@@ -51,14 +51,14 @@ def AmazonItems(sellerDF):
         print i
         try:
             try:
-                products = apiAmazon.search_n(1, Keywords=sellerDF.Title[i], SearchIndex='All')
+                products = apiAmazon.search_n(1, Keywords=sellerDF.Ebay_Title[i], SearchIndex='All')
             except:
                 time.sleep(3) # delays for 5 seconds
-                products = apiAmazon.search_n(1, Keywords=sellerDF.Title[i], SearchIndex='All')
+                products = apiAmazon.search_n(1, Keywords=sellerDF.Ebay_Title[i], SearchIndex='All')
                 print "wait"
         except:
             time.sleep(5) # delays for 5 seconds
-            products = apiAmazon.search_n(1, Keywords=sellerDF.Title[i], SearchIndex='All')
+            products = apiAmazon.search_n(1, Keywords=sellerDF.Ebay_Title[i], SearchIndex='All')
             print "wait2"
         try:
             TitleList.append(products[0].title)
@@ -86,7 +86,9 @@ def AmazonItems(sellerDF):
     return amazonDF
 
 starttime = datetime.datetime.time(datetime.datetime.now())
-testdf = ListSellersItems('nikkzakk')
+testdf = ListSellersItems('nikkzakk',10)
+midtime = datetime.datetime.time(datetime.datetime.now())
 testdfamazon = AmazonItems(testdf)
 result = pd.concat([testdf, testdfamazon], axis=1, join_axes=[testdf.index])
 endtime = datetime.datetime.time(datetime.datetime.now())
+# End
