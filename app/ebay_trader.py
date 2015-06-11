@@ -15,53 +15,26 @@ apiTrade = Trading(appid=appid, devid=devid, certid=certid, token=token,config_f
 apiShop = Shopping(appid=appid,config_file=None)
 
 
-# def ListSellersItems(UserID):
-#     responseSeller = apiTrade.execute('GetSellerList', {'UserID':UserID,'EndTimeFrom':'2015-06-05T19:09:02','EndTimeTo':'2015-07-09T00:09:02',  'GranularityLevel':'Fine', 'Pagination.EntriesPerPage':25, 'Pagination.PageNumber':1})
-#     ItemList = [item.ItemID for item in responseSeller.reply.ItemArray.Item]
-#     sellerDF = pd.DataFrame()
-#     # for i in range(0,1):
-#     for i in range(0,min(int(math.ceil(len(ItemList)/20.0)),10)):
-#         print i
-#         responseShop = apiShop.execute('GetMultipleItems', {'itemID':ItemList[(0+(i*20)):(20+(i*20))]})
-#         # responseShop.reply.Item.___ for different attribute
-#         TitleList = [item.Title for item in responseShop.reply.Item]
-#         PriceList = [item.ConvertedCurrentPrice.value for item in responseShop.reply.Item]
-#         CurrencyList = [item.ConvertedCurrentPrice._currencyID for item in responseShop.reply.Item]
-#         ImageList = [item.GalleryURL for item in responseShop.reply.Item]
-#         LinkList = [item.ViewItemURLForNaturalSearch for item in responseShop.reply.Item]
-#         sellerDFPage = pd.DataFrame({"Ebay_Title": TitleList, "Ebay_Price":PriceList, "Ebay_Currency":CurrencyList, "Ebay_ImageURL":ImageList, "Ebay_Link":LinkList })
-#         sellerDF = sellerDF.append(sellerDFPage)
-#     # May change this to append multiple calls of <20 together
-#     return sellerDF
 
 
-def ListSellersItems(UserID):
-    responseSeller = apiTrade.execute('GetSellerList', {'UserID':UserID,'EndTimeFrom':'2015-06-11T19:09:02','EndTimeTo':'2015-07-09T00:09:02',  'GranularityLevel':'Medium', 'Pagination':{'EntriesPerPage':1, 'PageNumber':1}})
-    ItemList = [item.ItemID for item in responseSeller.reply.ItemArray.Item]
-    PriceList = [item.SellingStatus.ConvertedCurrentPrice for item in responseSeller.reply.ItemArray.Item]
-    # Change this so it all comes from the first call
-    sellerDF = pd.DataFrame()
-    # for i in range(0,1):
-    for i in range(0,min(int(math.ceil(len(ItemList)/20.0)),10)):
-        print i
-        responseShop = apiShop.execute('GetMultipleItems', {'itemID':ItemList[(0+(i*20)):(20+(i*20))]})
-        # responseShop.reply.Item.___ for different attribute
-        TitleList = [item.Title for item in responseShop.reply.Item]
-        PriceList = [item.ConvertedCurrentPrice.value for item in responseShop.reply.Item]
-        CurrencyList = [item.ConvertedCurrentPrice._currencyID for item in responseShop.reply.Item]
-        ImageList = [item.GalleryURL for item in responseShop.reply.Item]
-        LinkList = [item.ViewItemURLForNaturalSearch for item in responseShop.reply.Item]
-        sellerDFPage = pd.DataFrame({"Ebay_Title": TitleList, "Ebay_Price":PriceList, "Ebay_Currency":CurrencyList, "Ebay_ImageURL":ImageList, "Ebay_Link":LinkList })
-        sellerDF = sellerDF.append(sellerDFPage)
-    # May change this to append multiple calls of <20 together
-    return sellerDF
+def ListSellersItems(UserID,entries):
+    responseSeller = apiTrade.execute('GetSellerList', {'UserID':UserID,'EndTimeFrom':'2015-06-11T19:09:02','EndTimeTo':'2015-07-09T00:09:02',  'GranularityLevel':'Medium', 'Pagination':{'EntriesPerPage':entries, 'PageNumber':1}})
+    TitleList = [item.Title for item in responseSeller.reply.ItemArray.Item]
+    PriceList = [item.SellingStatus.ConvertedCurrentPrice.value for item in responseSeller.reply.ItemArray.Item]
+    CurrencyList = [item.SellingStatus.ConvertedCurrentPrice._currencyID for item in responseSeller.reply.ItemArray.Item]
+    ImageList = [item.PictureDetails.PictureURL[0] for item in responseSeller.reply.ItemArray.Item]
+    LinkList = [item.ListingDetails.ViewItemURL for item in responseSeller.reply.ItemArray.Item]
+    EndDateList = [item.ListingDetails.EndTime for item in responseSeller.reply.ItemArray.Item]
+    sellerDFPage = pd.DataFrame({"Ebay_Title": TitleList, "Ebay_Price":PriceList, "Ebay_Currency":CurrencyList, "Ebay_End":EndDateList, "Ebay_ImageURL":ImageList, "Ebay_Link":LinkList })
+    # Check Datatype of dates and see if table can be arranged by price and date
+    # sellerDFPage.sort_index(by=['Ebay_Price', 'Ebay_Link'], ascending=[False, False])
+    # Ensure that this is acting in place
+    return sellerDFPage
 
 
 # ListSellersItems('nikkzakk')
 # UserID = 'nikkzakk'
-responseSeller = apiTrade.execute('GetSellerList', {'UserID':UserID,'EndTimeFrom':'2015-06-11T19:09:02','EndTimeTo':'2015-07-09T00:09:02',  'GranularityLevel':'Coa', 'Pagination':{'EntriesPerPage':1, 'PageNumber':1}})
-[item.SellingStatus.ConvertedCurrentPrice for item in responseSeller.reply.ItemArray.Item]
-.reply.ItemArray.Item.SellingStatus.ConvertedCurrentPrice
+
 
 from amazon.api import AmazonAPI
 apiAmazon = AmazonAPI(access_key_id_value, secret_access_key_value, associate_tag_value)
