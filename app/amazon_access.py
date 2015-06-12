@@ -10,11 +10,11 @@ apiAmazon = API(access_key_id=access_key_id_value,secret_access_key=secret_acces
 def AmazonItems(sellerDF):
     Amazon_listDF = pd.DataFrame()
     for j in sellerDF.index:
-        print "outer" + str(j)
+        # print "outer" + str(j)
         try:
             outerItemCall = apiAmazon.item_search('All', Keywords=sellerDF.Ebay_Title[j].replace('New!', ''), ResponseGroup='OfferFull', Condition='New',Availability='Available' )
             for i in range(0,(len(outerItemCall.page(1).Items.getchildren())-4)):
-                print "inner" + str(i)
+                # print "inner" + str(i)
                 if outerItemCall.page(1).Items.Item[i].Offers.Offer.OfferListing.IsEligibleForSuperSaverShipping == 1:
                     Amazon_numAvailible = str(outerItemCall.page(1).Items.Item[i].OfferSummary.TotalNew)
                     Amazon_currency = str(outerItemCall.page(1).Items.Item[i].Offers.Offer.OfferListing.Price.CurrencyCode)

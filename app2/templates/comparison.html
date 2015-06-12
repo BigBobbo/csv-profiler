@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<table class="table table-hover">
+   <tbody>
+      <tr>
+          <td colspan="4">Table</td>
+      </tr>
+
+      <tr>
+          {% for line in comparisonTable %}
+            {{ line|safe }}
+            </tr>
+          {% endfor %}
+       </tr>
+
+
+
+   </tbody>
+</table>
+{% endblock %}
+

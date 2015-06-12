@@ -4,6 +4,7 @@ from werkzeug import secure_filename
 import pandas as pd
 import numpy as np
 from .profiler import profileGen
+from .api_user import apiTrade, apiShop, ListSellersItems, apiAmazon, AmazonItems, comparisonTableHtml
 import shutil
 
 UPLOAD_FOLDER = '/home/csvprofiler/csv-profiler/app2/uploads'
@@ -44,7 +45,7 @@ def uploaded_file(filename):
     return render_template("analysis.html", name=filename, data=x.to_html(classes='.table, .table-condensed'))
 
 
-@app.route('/analysis/<filename>')
-def analysis(filename):
-    x = pd.DataFrame(np.random.randn(20, 5))
-    return render_template("analysis.html", name=request.headers['X-Real-IP'], data=x.to_html(classes='table'))
+@app.route('/arbitrage/<user>/<itemCount>')
+def analysis(user,itemCount):
+    x = comparisonTableHtml(user,itemCount)
+    return render_template("comparison.html", name=user, comparisonTable=x)
